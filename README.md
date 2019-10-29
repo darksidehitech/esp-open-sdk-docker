@@ -1,27 +1,26 @@
-Docker image with esp-open-sdk toolchain
+Docker image for esp-open-sdk toolchain
 =========================================
 
-## Getting started
 
-* pulling:
+## Pulling:
 
   ```
-  docker pull 3mdeb/esp-open-sdk
+  docker pull darksidehitech/esp-open-sdk
   ```
 
-* running:
+## Running:
 
 So far this container was used for building
-[esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos) projects
+[esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos) projects. For example:
 
   ```
   git clone --recursive https://github.com/Superhouse/esp-open-rtos.git
   cd esp-open-rtos
   docker run -it --device=/dev/ttyUSB0 -v ${PWD}:/home/build \
-      3mdeb/esp-open-sdk make flash -C examples/blink ESPPORT=/dev/ttyUSB0
+      darksidehitech/esp-open-sdk make flash -C examples/blink ESPPORT=/dev/ttyUSB0
   ```
 
-In case of access errors such as:
+If there exist access errors such as:
 
   ```
   serial.serialutil.SerialException: [Errno 13] could not open port /dev/ttyUSB0: [Errno 13] Permission denied: '/dev/ttyUSB0'
@@ -30,22 +29,9 @@ In case of access errors such as:
   make: Leaving directory '/home/build/examples/blink'
   ```
 
-Provide `udev` rules for your `tty` device, such as:
+You need to provide `udev` rules for your `tty` device, for example:
 
   ```
   echo 'SUBSYSTEM =="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60" , MODE="0666"' \
     | sudo tee /etc/udev/rules.d/52-esp-serial.rules
-  ```
-
-## Building
-
-Building for container development only. Otherwise using `docker pull` is
-advised.
-
-* building:
-
-  ```
-  git clone git@github.com:3mdeb/esp-open-sdk-docker.git
-  cd esp-opensdk-docker
-  docker build -t 3mdeb/esp-open-sdk .
   ```
